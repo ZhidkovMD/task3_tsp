@@ -201,3 +201,41 @@ double brutforcem(vector <Pn> cords, double result){
     }while(next_permutation(permutations.begin(), permutations.end()));
     return buf;
 }
+
+int main() {
+    vector <string> data = lfls("data"); string buf;
+    ofstream fout;
+    fout.open("result.txt");
+    string x;
+    try {
+        for (int k = 0; k < data.size(); k++) {
+            x = data[k];
+            int count = 0;
+            cout << x << endl << flush;
+            vector <Pn> cords;
+            ifstream file("data/" + x);
+            getline(file, buf);
+            while (getline(file, buf)) {
+                if (buf == "") continue;
+                cords.push_back(razd(buf, x));
+            }
+            file.close();
+            TSP test(cords);
+            while (!test.konn()) {
+                test.linered();
+                test.colred();
+                test.grc();
+                test.matrred();
+                count++;
+                cout << count << flush << endl;
+            }
+            cout << x << "test finished" << endl;
+            fout << x << ":" << test.price() << endl;
+        }
+    }
+    catch (exception& e) {
+        cout << e.what();
+        cin.get();
+    }
+    fout.close();
+}
